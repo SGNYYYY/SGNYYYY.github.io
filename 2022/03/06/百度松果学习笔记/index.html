@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="1.飞桨与python入门操作Python数据结构 数字(Number) 字符串(String) 列表(List) 元组(Tuple) 与列表类似，区别是元组中的内容不可修改 定义一个元组，注意：元组中只有一个元素时，需要在后面加逗号   字典(Dict)  Python库Numpy(Numerical Python) 是高性能科学计算和数据分析的基础包Numpy中文网 MatplotlibMat">
+    <meta name="description" content="1.飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计Python数据结构 数字(Number) 字符串(String) 列表(List) 元组(Tuple) 与列表类似，区别是元组中的内容不可修改 定义一个元组，注意：元组中只有一个元素时，需要在后面加逗号   字典(Dict)  Python库 Numpy(Numerical Python) 是高性能科学计算和数据分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="百度松果学习笔记">
 <meta property="og:url" content="https://sgnyyyy.github.io/2022/03/06/%E7%99%BE%E5%BA%A6%E6%9D%BE%E6%9E%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Sam&#39;s Blog">
-<meta property="og:description" content="1.飞桨与python入门操作Python数据结构 数字(Number) 字符串(String) 列表(List) 元组(Tuple) 与列表类似，区别是元组中的内容不可修改 定义一个元组，注意：元组中只有一个元素时，需要在后面加逗号   字典(Dict)  Python库Numpy(Numerical Python) 是高性能科学计算和数据分析的基础包Numpy中文网 MatplotlibMat">
+<meta property="og:description" content="1.飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计Python数据结构 数字(Number) 字符串(String) 列表(List) 元组(Tuple) 与列表类似，区别是元组中的内容不可修改 定义一个元组，注意：元组中只有一个元素时，需要在后面加逗号   字典(Dict)  Python库 Numpy(Numerical Python) 是高性能科学计算和数据分析">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-03-06T08:20:36.000Z">
-<meta property="article:modified_time" content="2022-03-06T13:59:58.953Z">
+<meta property="article:modified_time" content="2022-03-10T10:55:07.964Z">
 <meta property="article:author" content="SGNYYYY">
 <meta name="twitter:card" content="summary">
     
@@ -103,7 +103,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%A3%9E%E6%A1%A8%E4%B8%8Epython%E5%85%A5%E9%97%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">1.飞桨与python入门操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">Python数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E5%BA%93"><span class="toc-number">1.2.</span> <span class="toc-text">Python库</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%A3%9E%E6%A1%A8%E4%B8%8Epython%E5%85%A5%E9%97%A8%E6%93%8D%E4%BD%9C-%E5%AE%9E%E8%B7%B5%EF%BC%9A%E6%B5%B7%E9%87%8F%E6%96%87%E4%BB%B6%E9%81%8D%E5%8E%86%E3%80%81%E5%9B%BE%E5%83%8F%E7%9B%B4%E6%96%B9%E5%9B%BE%E7%BB%9F%E8%AE%A1%E3%80%81%E6%96%87%E6%9C%AC%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">1.飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">Python数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E5%BA%93"><span class="toc-number">1.2.</span> <span class="toc-text">Python库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-python%E5%A4%8D%E6%9D%82%E6%93%8D%E4%BD%9C-%E5%AE%9E%E8%B7%B5%EF%BC%9A%E7%88%AC%E8%99%AB%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">2.python复杂操作-实践：爬虫与数据分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB-Class"><span class="toc-number">2.1.</span> <span class="toc-text">类(Class)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">2.2.</span> <span class="toc-text">JSON序列化与反序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pandas%E5%BA%93"><span class="toc-number">2.3.</span> <span class="toc-text">Pandas库</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -142,7 +142,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="1-飞桨与python入门操作"><a href="#1-飞桨与python入门操作" class="headerlink" title="1.飞桨与python入门操作"></a>1.飞桨与python入门操作</h2><h3 id="Python数据结构"><a href="#Python数据结构" class="headerlink" title="Python数据结构"></a>Python数据结构</h3><ul>
+    <h2 id="1-飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计"><a href="#1-飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计" class="headerlink" title="1.飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计"></a>1.飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计</h2><h3 id="Python数据结构"><a href="#Python数据结构" class="headerlink" title="Python数据结构"></a>Python数据结构</h3><ul>
 <li>数字(Number)</li>
 <li>字符串(String)</li>
 <li>列表(List)</li>
@@ -152,8 +152,20 @@
 </li>
 <li>字典(Dict)</li>
 </ul>
-<h3 id="Python库"><a href="#Python库" class="headerlink" title="Python库"></a>Python库</h3><p>Numpy(Numerical Python) 是高性能科学计算和数据分析的基础包<br><a target="_blank" rel="noopener" href="https://www.numpy.org.cn/">Numpy中文网</a></p>
-<p>Matplotlib<br><a target="_blank" rel="noopener" href="https://www.matplotlib.org.cn/">Matplotlib中文网</a></p>
+<h3 id="Python库"><a href="#Python库" class="headerlink" title="Python库"></a>Python库</h3><ul>
+<li><p>Numpy(Numerical Python) 是高性能科学计算和数据分析的基础包<br><a target="_blank" rel="noopener" href="https://www.numpy.org.cn/">Numpy中文网</a></p>
+</li>
+<li><p>Matplotlib<br><a target="_blank" rel="noopener" href="https://www.matplotlib.org.cn/">Matplotlib中文网</a></p>
+</li>
+</ul>
+<h2 id="2-python复杂操作-实践：爬虫与数据分析"><a href="#2-python复杂操作-实践：爬虫与数据分析" class="headerlink" title="2.python复杂操作-实践：爬虫与数据分析"></a>2.python复杂操作-实践：爬虫与数据分析</h2><h3 id="类-Class"><a href="#类-Class" class="headerlink" title="类(Class)"></a>类(Class)</h3><h3 id="JSON序列化与反序列化"><a href="#JSON序列化与反序列化" class="headerlink" title="JSON序列化与反序列化"></a>JSON序列化与反序列化</h3><ul>
+<li>JSON序列化：json.dumps用于将Python对象编码成JSON字符串</li>
+<li>JSON反序列化：json.loads用于解码JSON数据。该函数返回Python字段的数据类型<h3 id="Pandas库"><a href="#Pandas库" class="headerlink" title="Pandas库"></a>Pandas库</h3></li>
+<li><a target="_blank" rel="noopener" href="https://www/pyPandas.cn/">Pandas中文网</a>  </li>
+<li>Pandas是Python第三方库,提供高性能易用数据类型和分析工具  </li>
+<li>Pandas基于Numpy实现，常与Numpy和matplotlib一同使用  </li>
+<li>两大核心数据结构：<em>Series</em>(一维数据)<em>DataFrame</em>(多维特征数据,既有行索引,又有列索引)</li>
+</ul>
 
   </div>
 </article>
@@ -179,7 +191,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%A3%9E%E6%A1%A8%E4%B8%8Epython%E5%85%A5%E9%97%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">1.飞桨与python入门操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">Python数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E5%BA%93"><span class="toc-number">1.2.</span> <span class="toc-text">Python库</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%A3%9E%E6%A1%A8%E4%B8%8Epython%E5%85%A5%E9%97%A8%E6%93%8D%E4%BD%9C-%E5%AE%9E%E8%B7%B5%EF%BC%9A%E6%B5%B7%E9%87%8F%E6%96%87%E4%BB%B6%E9%81%8D%E5%8E%86%E3%80%81%E5%9B%BE%E5%83%8F%E7%9B%B4%E6%96%B9%E5%9B%BE%E7%BB%9F%E8%AE%A1%E3%80%81%E6%96%87%E6%9C%AC%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">1.飞桨与python入门操作-实践：海量文件遍历、图像直方图统计、文本词频统计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">Python数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python%E5%BA%93"><span class="toc-number">1.2.</span> <span class="toc-text">Python库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-python%E5%A4%8D%E6%9D%82%E6%93%8D%E4%BD%9C-%E5%AE%9E%E8%B7%B5%EF%BC%9A%E7%88%AC%E8%99%AB%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">2.python复杂操作-实践：爬虫与数据分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB-Class"><span class="toc-number">2.1.</span> <span class="toc-text">类(Class)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">2.2.</span> <span class="toc-text">JSON序列化与反序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pandas%E5%BA%93"><span class="toc-number">2.3.</span> <span class="toc-text">Pandas库</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
