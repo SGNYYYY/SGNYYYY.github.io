@@ -1,0 +1,209 @@
+<!DOCTYPE html><html lang="EN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>共享文库方案设计 | Sam's Blog</title><meta name="author" content="SGNYYYY"><meta name="copyright" content="SGNYYYY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="总体架构前端：微信小程序（登录、上传、浏览、收藏、评论、分享、离线缓存）后端：Flask + Flask-RESTful 或 Flask-Smorest（API），PostgreSQL（主数据），Redis（缓存、限流、Celery broker）对象存储：腾讯 COS &#x2F; 阿里 OSS &#x2F; S3（推荐前端直传，服务端下发临时凭证或签名）异步任务：Celery + Redis（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="共享文库方案设计">
+<meta property="og:url" content="https://sgnyyyy.github.io/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="Sam&#39;s Blog">
+<meta property="og:description" content="总体架构前端：微信小程序（登录、上传、浏览、收藏、评论、分享、离线缓存）后端：Flask + Flask-RESTful 或 Flask-Smorest（API），PostgreSQL（主数据），Redis（缓存、限流、Celery broker）对象存储：腾讯 COS &#x2F; 阿里 OSS &#x2F; S3（推荐前端直传，服务端下发临时凭证或签名）异步任务：Celery + Redis（">
+<meta property="og:locale">
+<meta property="og:image" content="https://sgnyyyy.github.io/images/avatar.jpg">
+<meta property="article:published_time" content="2025-10-13T06:49:04.000Z">
+<meta property="article:modified_time" content="2025-10-13T07:40:43.367Z">
+<meta property="article:author" content="SGNYYYY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sgnyyyy.github.io/images/avatar.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sgnyyyy.github.io/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '共享文库方案设计',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-13 15:40:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Sam's Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw fas fa-video"></i><span> Video</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/background1mb.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Sam's Blog"><span class="site-name">Sam's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw fas fa-video"></i><span> Video</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">共享文库方案设计</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-10-13T06:49:04.000Z" title="Created 2025-10-13 14:49:04">2025-10-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-10-13T07:40:43.367Z" title="Updated 2025-10-13 15:40:43">2025-10-13</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="共享文库方案设计"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="总体架构"><a href="#总体架构" class="headerlink" title="总体架构"></a>总体架构</h2><p>前端：微信小程序（登录、上传、浏览、收藏、评论、分享、离线缓存）<br>后端：Flask + Flask-RESTful 或 Flask-Smorest（API），PostgreSQL（主数据），Redis（缓存、限流、Celery broker）<br>对象存储：腾讯 COS &#x2F; 阿里 OSS &#x2F; S3（推荐前端直传，服务端下发临时凭证或签名）<br>异步任务：Celery + Redis（缩略图、OCR、索引）<br>搜索：Postgres ts_vector 起步，Meilisearch&#x2F;Elasticsearch 可选<br>鉴权：微信 code -&gt; openid -&gt; 本端创建&#x2F;查找用户，返回 JWT（flask_jwt_extended）</p>
+<h2 id="核心功能模块与数据模型（简化）"><a href="#核心功能模块与数据模型（简化）" class="headerlink" title="核心功能模块与数据模型（简化）"></a>核心功能模块与数据模型（简化）</h2><p>用户（微信 openid 关联）<br>文档资源（元信息、文件 URL、类型、标签、权限）<br>评论、收藏、下载&#x2F;分享记录<br>权限&#x2F;库（公共&#x2F;私有&#x2F;小组）</p>
+<h2 id="API-设计要点"><a href="#API-设计要点" class="headerlink" title="API 设计要点"></a>API 设计要点</h2><p>RESTful 资源：&#x2F;api&#x2F;docs&#x2F;, &#x2F;api&#x2F;docs&#x2F;{id}&#x2F;, &#x2F;api&#x2F;docs&#x2F;{id}&#x2F;comments&#x2F;, &#x2F;api&#x2F;favorites&#x2F;, &#x2F;api&#x2F;users&#x2F;me<br>支持分页、筛选（按标签、类型、owner）、排序（最新&#x2F;热度）<br>文件处理任务异步：上传后入队列：生成缩略图、提取文本（OCR&#x2F;Tika）、建立全文索引<br>权限：公开&#x2F;私人&#x2F;指定用户组；API 层校验 owner 和 ACL</p>
+<h2 id="搜索策略"><a href="#搜索策略" class="headerlink" title="搜索策略"></a>搜索策略</h2><p>起步：使用 PostgreSQL 的 ts_vector（内置）做全文搜索<br>进阶：Meilisearch（简单、速度快）或 Elasticsearch（功能强）</p>
+<h2 id="性能与安全"><a href="#性能与安全" class="headerlink" title="性能与安全"></a>性能与安全</h2><p>使用对象存储避免数据库存二进制<br>对上传文件做类型和大小校验，必要时做病毒扫描<br>对高频接口做限流（DRF throttle + Redis）<br>HTTPS、CORS、CSRF（小程序一般使用 token header）</p>
+<h2 id="部署与运维（简要）"><a href="#部署与运维（简要）" class="headerlink" title="部署与运维（简要）"></a>部署与运维（简要）</h2><p>本地开发：python manage.py runserver_plus 或 docker-compose up<br>生产：Docker + Gunicorn + Nginx；配置域名并在微信后台添加合法请求域名与下载域名<br>自动化：CI（lint -&gt; tests -&gt; build image -&gt; deploy）</p>
+<h2 id="发与测试建议"><a href="#发与测试建议" class="headerlink" title="发与测试建议"></a>发与测试建议</h2><p>先实现最小可用产品（上传&#x2F;浏览&#x2F;分享&#x2F;收藏）<br>编写单元测试与 API 测试（pytest + DRF）<br>使用 Postman &#x2F; Insomnia 或 微信开发者工具调试小程序端</p>
+<h2 id="可选增强功能"><a href="#可选增强功能" class="headerlink" title="可选增强功能"></a>可选增强功能</h2><p>文档预览（PDF 转图片&#x2F;HTML）<br>OCR 提取全文并建立搜索索引<br>管理后台（Django admin &#x2F; 自建后台）<br>分享链路统计、访问控制与过期链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/shgny/Project/SharedLibrary/backend</span><br><span class="line"></span><br><span class="line"># 1) 创建并激活虚拟环境</span><br><span class="line">python3 -m venv venv</span><br><span class="line">source venv/bin/activate</span><br><span class="line"></span><br><span class="line"># 2) 安装依赖</span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 3) 创建 uploads 目录（可选）</span><br><span class="line">mkdir -p uploads</span><br><span class="line"></span><br><span class="line"># 4) 初始化数据库迁移并创建 sqlite 数据库</span><br><span class="line">export FLASK_APP=run.py</span><br><span class="line">flask db init</span><br><span class="line">flask db migrate -m &quot;init&quot;</span><br><span class="line">flask db upgrade</span><br><span class="line"></span><br><span class="line"># 5) 运行应用</span><br><span class="line">python run.py</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://sgnyyyy.github.io">SGNYYYY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://sgnyyyy.github.io/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/">https://sgnyyyy.github.io/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/images/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/11/07/%E7%AC%94%E8%AE%B0-of-Build-a-Large-Language-Model-From-Scratch/" title="笔记 of Build a Large Language Model (From Scratch)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">笔记 of Build a Large Language Model (From Scratch)</div></div></a></div><div class="next-post pull-right"><a href="/2025/06/03/%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="自定义类加载器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">自定义类加载器</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">SGNYYYY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/SGNYYYY" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:shangguanningyuan@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/82679749" target="_blank" title="bilibili"><i class="fa-brands fa-bilibili"></i></a><a class="social-icon" href="/images/WechatQRCode.jpeg" target="_blank" title="Wechat"><i class="fa-brands fa-weixin"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-text">总体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%EF%BC%88%E7%AE%80%E5%8C%96%EF%BC%89"><span class="toc-text">核心功能模块与数据模型（简化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API-%E8%AE%BE%E8%AE%A1%E8%A6%81%E7%82%B9"><span class="toc-text">API 设计要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E7%AD%96%E7%95%A5"><span class="toc-text">搜索策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%B8%8E%E5%AE%89%E5%85%A8"><span class="toc-text">性能与安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%BF%90%E7%BB%B4%EF%BC%88%E7%AE%80%E8%A6%81%EF%BC%89"><span class="toc-text">部署与运维（简要）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95%E5%BB%BA%E8%AE%AE"><span class="toc-text">发与测试建议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E9%80%89%E5%A2%9E%E5%BC%BA%E5%8A%9F%E8%83%BD"><span class="toc-text">可选增强功能</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/07/%E7%AC%94%E8%AE%B0-of-Build-a-Large-Language-Model-From-Scratch/" title="笔记 of Build a Large Language Model (From Scratch)">笔记 of Build a Large Language Model (From Scratch)</a><time datetime="2025-11-07T06:00:04.000Z" title="Created 2025-11-07 14:00:04">2025-11-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/" title="共享文库方案设计">共享文库方案设计</a><time datetime="2025-10-13T06:49:04.000Z" title="Created 2025-10-13 14:49:04">2025-10-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/03/%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="自定义类加载器">自定义类加载器</a><time datetime="2025-06-03T02:17:38.000Z" title="Created 2025-06-03 10:17:38">2025-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/28/go%E8%AF%AD%E8%A8%80%E5%86%99%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" title="Go语言写单元测试">Go语言写单元测试</a><time datetime="2025-05-28T01:40:06.000Z" title="Created 2025-05-28 09:40:06">2025-05-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/07/%E7%AE%80%E5%8D%95DNS%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%BC%96%E5%86%99/" title="简单DNS客户端编写">简单DNS客户端编写</a><time datetime="2025-05-07T10:20:34.000Z" title="Created 2025-05-07 18:20:34">2025-05-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By SGNYYYY</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://sgnyyyy.github.io/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/'
+    this.page.identifier = '/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/'
+    this.page.title = '共享文库方案设计'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https://sgnyyyy.disqus.com.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

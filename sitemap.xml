@@ -2,6 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sgnyyyy.github.io/2025/11/07/%E7%AC%94%E8%AE%B0-of-Build-a-Large-Language-Model-From-Scratch/</loc>
+    
+    <lastmod>2025-11-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sgnyyyy.github.io/2024/12/26/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/</loc>
+    
+    <lastmod>2025-11-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sgnyyyy.github.io/2025/03/14/%E7%B4%A0%E6%95%B0%E7%AD%9B/</loc>
+    
+    <lastmod>2025-11-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sgnyyyy.github.io/2025/10/13/%E5%85%B1%E4%BA%AB%E6%96%87%E5%BA%93%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/</loc>
+    
+    <lastmod>2025-10-13</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sgnyyyy.github.io/2025/05/06/DNS%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</loc>
     
     <lastmod>2025-06-09</lastmod>
@@ -65,24 +101,6 @@
   </url>
   
   <url>
-    <loc>https://sgnyyyy.github.io/2025/03/14/%E7%B4%A0%E6%95%B0%E7%AD%9B/</loc>
-    
-    <lastmod>2025-03-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sgnyyyy.github.io/2024/12/26/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%95%B4%E7%90%86/</loc>
-    
-    <lastmod>2025-02-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://sgnyyyy.github.io/about/index.html</loc>
     
     <lastmod>2022-10-17</lastmod>
@@ -130,7 +148,7 @@
 
   <url>
     <loc>https://sgnyyyy.github.io/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-11-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -140,21 +158,35 @@
   
   <url>
     <loc>https://sgnyyyy.github.io/categories/DNS/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://sgnyyyy.github.io/categories/Java/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://sgnyyyy.github.io/categories/Go/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://sgnyyyy.github.io/categories/Notebook/</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://sgnyyyy.github.io/categories/Algorithm/</loc>
+    <lastmod>2025-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
